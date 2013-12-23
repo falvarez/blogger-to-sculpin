@@ -1,0 +1,15 @@
+{
+    "name": "xenji/migrate-blogger",
+    "description": "a simple migration tool to migrate away from blogger to sculpin.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mario Mueller",
+            "email": "mario@xenji.com"
+        }
+    ],
+    "require": {
+        "simplepie/simplepie": "*",
+        "nickcernis/html-to-markdown": "dev-master"
+    }
+}
