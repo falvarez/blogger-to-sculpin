@@ -1,44 +1,13 @@
 #!/usr/bin/php
 <?php
-include_once(__DIR__ . '/vendor/autoload.php');
-include __DIR__ . '/Post.php';
-// Parse it
-$feed = new SimplePie();
-if (isset($argv[1]) && $argv[1] !== '') {
-    $feed->set_feed_url($argv[1]);
-    $feed->enable_cache(false);
-    $feed->init();
+require 'vendor/autoload.php';
 
-    $markdown = new HTML_To_Markdown();
+use Falvarez\Sculpin\Utils\MigrateScript;
 
-    foreach ($feed->get_items() as $item) {
-        /* @var $item SimplePie_Item */
+date_default_timezone_set('Europe/Madrid');
 
-        // Filter settings (from the export file)
-        if ($item->get_category()->term !== 'http://schemas.google.com/blogger/2008/kind#post') {
-            continue;
-        }
+$logger = new \Monolog\Logger('default');
 
-        $post = new \Post();
-        $post->title = $item->get_title();
-        $post->content = $markdown->convert($item->get_content());
-        foreach ($item->get_categories() as $category) {
-            /* @var $category SimplePie_Category */
-            if ($category->get_label() !== 'http://schemas.google.com/blogger/2008/kind#post') {
-                $label = $category->get_label();
-                if (preg_match('/[a-z]/', $label{0})) {
-                    $post->tags[] = $label;
-                }
-                else {
-                    $post->categories[] = $label;
-                }
-            }
-            $post->permalink = $item->get_permalink();
-            $post->date = $item->get_date('Y-m-d');
-
-            $post->getConvertedFileContent();
-        }
-
-        var_dump($post);
-    }
-}
+$configuration = include('config.php');
+$migrateScript = new MigrateScript($argv[1], $configuration, $logger);
+$migrateScript->run();

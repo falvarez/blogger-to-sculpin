@@ -1,0 +1,11 @@
+<?php
+return [
+    'exportFolder' => 'output/', // Folder where archives will be saved
+    'postsFolder' => '_posts/', // Folder where posts will be saved (relative to exportFolder)
+    'downloadRemoteImages' => true, // Activate remote images download
+    'imagesRootFolder' => 'uploads/', // Folder where remote images will be saved (relative to exportFolder)
+    'blogUrl' => 'https://blog.foo.com/', // Blog URL
+    'convertBrToParagraphs' => true, // Activate BR conversion to paragraphs
+    'includeDisqusData' => true // Include Disqus widget data in posts
+    'enableMarkdownOutput' => false // Enable Markdown output
+];

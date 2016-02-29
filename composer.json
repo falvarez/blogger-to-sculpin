@@ -1,15 +1,23 @@
 {
-    "name": "xenji/migrate-blogger",
-    "description": "a simple migration tool to migrate away from blogger to sculpin.",
+    "name": "falvarez/migrate-blogger",
+    "description": "A simple script to migrate from Blogger to Sculpin. Inspired by Mario Mueller<mario@xenji.com>. ",
     "license": "MIT",
     "authors": [
         {
-            "name": "Mario Mueller",
-            "email": "mario@xenji.com"
+            "name": "Federico J. Álvarez Valero",
+            "email": "fede.alvarez@gmail.com"
         }
     ],
     "require": {
-        "simplepie/simplepie": "*",
-        "nickcernis/html-to-markdown": "dev-master"
+        "php": ">=5.4.0",
+        "simplepie/simplepie": "^1.3",
+        "league/html-to-markdown": "^4.2",
+        "cocur/slugify": "^2.0",
+        "monolog/monolog": "^1.17"
+    },
+    "autoload": {
+        "psr-4": {
+            "Falvarez\\": "src/"
+        }
     }
 }
