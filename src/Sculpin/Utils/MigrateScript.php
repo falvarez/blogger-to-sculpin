@@ -71,12 +71,13 @@ class MigrateScript
             $images[] = [
                 'source' => $src,
                 'destinationPath' => $this->configuration['exportFolder'] . $this->configuration['imagesRootFolder'] . $folderPrefix,
-                'destinationFile' => basename($src)
+                'destinationFile' => basename($src),
+                'destinationUrl' => $this->configuration['blogUrl'] . $this->configuration['imagesRootFolder'] . $folderPrefix . basename($src)
             ];
         }
         foreach ($images as $image) {
             $this->downloadImage($image);
-            $content = str_replace($image['source'], '/' . $image['destinationPath'] . $image['destinationFile'],
+            $content = str_replace($image['source'], $image['destinationUrl'],
                 $content);
         }
         return $content;
