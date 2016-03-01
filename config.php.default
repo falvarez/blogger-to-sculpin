@@ -6,6 +6,7 @@ return [
     'imagesRootFolder' => 'uploads/', // Folder where remote images will be saved (relative to exportFolder)
     'blogUrl' => 'https://blog.foo.com/', // Blog URL
     'convertBrToParagraphs' => true, // Activate BR conversion to paragraphs
-    'includeDisqusData' => true // Include Disqus widget data in posts
-    'enableMarkdownOutput' => false // Enable Markdown output
+    'includeDisqusData' => true, // Include Disqus widget data in posts
+    'enableMarkdownOutput' => false, // Enable Markdown output
+    'enableCustomizations' => false, // Enable customizations for my new blog theme
 ];

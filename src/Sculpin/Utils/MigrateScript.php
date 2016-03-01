@@ -130,7 +130,7 @@ class MigrateScript
             if (!preg_match('#^<.+$#', $line)) {
                 $paragraphs .= '<p>' . $line . '</p>';
             } else {
-                $paragraphs .= $line;
+                $paragraphs .= $line . "\n";
             }
         }
         return str_replace('<p></p>', '', $paragraphs);

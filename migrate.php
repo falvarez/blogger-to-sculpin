@@ -5,6 +5,7 @@ require 'vendor/autoload.php';
 use Falvarez\Sculpin\Utils\MigrateScript;
 
 date_default_timezone_set('Europe/Madrid');
+setlocale(LC_ALL, 'es_ES');
 
 $logger = new \Monolog\Logger('default');
 

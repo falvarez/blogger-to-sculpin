@@ -4,6 +4,8 @@ namespace Falvarez\Sculpin\Utils;
 
 use Cocur\Slugify\Slugify;
 use DateTime;
+use DOMDocument;
+use DOMElement;
 use League\HTMLToMarkdown\HtmlConverter;
 
 class Post
@@ -26,6 +28,11 @@ class Post
     protected $draft;
     /** @var bool */
     protected $markdownOutput = true;
+    /** @var bool */
+    protected $customizedOutput = true;
+
+    /** @var string  */
+    protected $headerImage = null;
 
     /**
      * @return DateTime
@@ -49,10 +56,25 @@ class Post
     }
 
     /**
+     *
+     */
+    private function setHeaderImageFromBodyImages() {
+        $doc = new DOMDocument();
+        $doc->loadHTML($this->content);
+        $imageTags = $doc->getElementsByTagName('img');
+        if ($imageTags->length > 0) {
+            /** @var DOMElement $firstImage */
+            $firstImage = $imageTags->item(0);
+            $this->headerImage = $firstImage->getAttribute('src');
+        }
+    }
+
+    /**
      * @param $content
      */
     public function setContent($content) {
-        $this->content =$content;
+        $this->content = $content;
+        $this->setHeaderImageFromBodyImages();
     }
 
     /**
@@ -107,6 +129,21 @@ class Post
     /**
      * @return string
      */
+    private function getCustomizedContent() {
+        $content = str_replace('<img ', '<img class="center-block img-responsive" ', $this->content);
+        return $content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent() {
+        return !$this->customizedOutput ? $this->content : $this->getCustomizedContent();
+    }
+
+    /**
+     * @return string
+     */
     private function getMarkdownContent() {
         $converter = new HtmlConverter();
         return $converter->convert($this->content);
@@ -118,7 +155,7 @@ class Post
     private function getFormattedContent() {
         return $this->markdownOutput ?
             $this->getMarkdownContent() :
-            $this->content;
+            $this->getContent();
     }
 
     /**
@@ -146,8 +183,11 @@ class Post
         $lines[] = '---';
         $lines[] = 'layout: ' . $this->layout;
         $lines[] = 'title: "' . addslashes($this->title) . '"';
+        if ($this->headerImage !== null) {
+            $lines[] = 'header_image: ' . $this->headerImage;
+        }
+        $lines[] = 'text_date: ' . ucfirst(strftime("%A, %e de %B de %Y", $this->dateTime->getTimestamp()));
         $lines[] = 'tags: [' . join(',' , $this->tags) . ']';
-        $lines[] = 'categories: [' . join(',' , $this->categories) . ']';
         if ($this->draft) {
             $lines[] = 'draft: true';
         }
