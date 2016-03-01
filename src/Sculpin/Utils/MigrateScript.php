@@ -68,11 +68,16 @@ class MigrateScript
         foreach ($imageTags as $imageTag) {
             /** @var DOMElement $imageTag */
             $src = $imageTag->getAttribute('src');
+
+            // Querystring must be removed from image URL
+            $imageBasename = explode('?', basename($src));
+            $imageBasename = $imageBasename[0];
+
             $images[] = [
                 'source' => $src,
                 'destinationPath' => $this->configuration['exportFolder'] . $this->configuration['imagesRootFolder'] . $folderPrefix,
-                'destinationFile' => basename($src),
-                'destinationUrl' => $this->configuration['blogUrl'] . $this->configuration['imagesRootFolder'] . $folderPrefix . basename($src)
+                'destinationFile' => $imageBasename,
+                'destinationUrl' => $this->configuration['blogUrl'] . $this->configuration['imagesRootFolder'] . $folderPrefix . $imageBasename
             ];
         }
         foreach ($images as $image) {
@@ -99,6 +104,7 @@ class MigrateScript
         $fp = fopen($imageData['destinationPath'] . $imageData['destinationFile'], 'wb');
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_exec($ch);
         curl_close($ch);
         fclose($fp);
