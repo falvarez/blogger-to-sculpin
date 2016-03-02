@@ -182,7 +182,7 @@ class Post
         $lines = [];
         $lines[] = '---';
         $lines[] = 'layout: ' . $this->layout;
-        $lines[] = 'title: "' . addslashes($this->title) . '"';
+        $lines[] = 'title: "' . addcslashes($this->title, '"') . '"';
         if ($this->headerImage !== null) {
             $lines[] = 'header_image: ' . $this->headerImage;
         }
