@@ -33,6 +33,8 @@ class Post
 
     /** @var string  */
     protected $headerImage = null;
+    /** @var string */
+    protected $summary = null;
 
     /**
      * @return DateTime
@@ -53,6 +55,21 @@ class Post
      */
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+    public function getSummary() {
+        if ($this->summary === null) {
+            $doc = new DOMDocument();
+            $doc->loadHTML($this->content);
+            $paragraphs = $doc->getElementsByTagName('p');
+            if ($paragraphs->length > 0) {
+                $this->summary = preg_replace( "/\r|\n/", '', trim(strip_tags($paragraphs->item(0)->textContent)));
+            }
+            else {
+                $this->summary = '';
+            }
+        }
+        return $this->summary;
     }
 
     /**
@@ -183,8 +200,10 @@ class Post
         $lines[] = '---';
         $lines[] = 'layout: ' . $this->layout;
         $lines[] = 'title: "' . addcslashes($this->title, '"') . '"';
+        $lines[] = 'summary: "' . addcslashes($this->getSummary(), '"') . '"';
         if ($this->headerImage !== null) {
             $lines[] = 'header_image: ' . $this->headerImage;
+            $lines[] = 'main_image: ' . $this->headerImage;
         }
         $lines[] = 'text_date: ' . ucfirst(strftime("%A, %e de %B de %Y", $this->dateTime->getTimestamp()));
         $lines[] = 'tags: [' . join(',' , $this->tags) . ']';
