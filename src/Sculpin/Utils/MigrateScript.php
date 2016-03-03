@@ -116,7 +116,12 @@ class MigrateScript
      */
     private function parseHtml($html)
     {
-        return htmlspecialchars_decode(html_entity_decode($html));
+        $html = htmlspecialchars_decode(html_entity_decode($html));
+        $html = str_replace(
+            ['<strike>', '</strike>', '<i>', '</i>', '<b>', '</b>'],
+            ['<del>', '</del>', '<em>', '</em>', '<strong>', '</strong>'],
+            $html);
+        return $html;
     }
 
     /**
