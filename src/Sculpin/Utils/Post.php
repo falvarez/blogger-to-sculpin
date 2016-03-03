@@ -60,7 +60,7 @@ class Post
     public function getSummary() {
         if ($this->summary === null) {
             $doc = new DOMDocument();
-            $doc->loadHTML($this->content);
+            $doc->loadHTML('<meta charset="utf-8">' . $this->content); // "Suggest" utf8 content
             $paragraphs = $doc->getElementsByTagName('p');
             if ($paragraphs->length > 0) {
                 $this->summary = preg_replace( "/\r|\n/", '', trim(strip_tags($paragraphs->item(0)->textContent)));
